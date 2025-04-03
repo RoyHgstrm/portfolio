@@ -2,6 +2,9 @@
 
 A modern, responsive portfolio website built with Next.js, Tailwind CSS, and TypeScript.
 
+![image](https://github.com/user-attachments/assets/5f3140f6-07fc-488b-acf4-e0de2a41126d)
+
+
 ## Features
 
 - Responsive design that looks great on all devices
