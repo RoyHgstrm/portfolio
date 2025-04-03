@@ -8,7 +8,6 @@ A modern, responsive portfolio website built with Next.js, Tailwind CSS, and Typ
 - Dark mode support
 - Smooth animations and transitions
 - Modern UI with glassmorphism effects
-- Task manager with localStorage persistence
 - Interactive skill progress visualization
 - Video to Text Converter demo integration
 
