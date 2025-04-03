@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/demo/',
     },
-    sitemap: 'https://roy.kitp.fi/sitemap.xml',
+    sitemap: 'https://royhgstrm.github.io/portfolio/sitemap.xml',
   };
 } 

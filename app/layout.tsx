@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     statusBarStyle: 'black-translucent',
   },
   applicationName: `${ownerName} | Portfolio`,
-  metadataBase: new URL(''),
+  metadataBase: new URL('https://royhgstrm.github.io/portfolio'),
 };
 
 export default function RootLayout({

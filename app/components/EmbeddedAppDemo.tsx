@@ -74,53 +74,53 @@ export default function EmbeddedAppDemo() {
   return (
     <div className="relative p-4 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center py-6 md:py-10">
-          <div className="w-8 md:w-10 h-8 md:h-10 border-3 md:border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3 md:mb-4"></div>
-          <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">Checking connection...</p>
+        <div className="flex flex-col items-center justify-center py-4 md:py-6">
+          <div className="w-6 md:w-8 h-6 md:h-8 border-2 md:border-3 border-blue-500 border-t-transparent rounded-full animate-spin mb-2 md:mb-3"></div>
+          <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300">Checking connection...</p>
         </div>
       ) : isConnected ? (
-        <div className="space-y-3 md:space-y-4">
+        <div className="space-y-2 md:space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span className="w-2 md:w-3 h-2 md:h-3 bg-green-500 rounded-full animate-pulse"></span>
-              <h3 className="text-base md:text-lg font-medium text-gray-900 dark:text-gray-100">
+              <span className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full animate-pulse"></span>
+              <h3 className="text-sm md:text-base font-medium text-gray-900 dark:text-gray-100">
                 Application is running
               </h3>
             </div>
-            <div className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full text-gray-600 dark:text-gray-300">
+            <div className="text-[10px] md:text-xs bg-gray-100 dark:bg-gray-700 px-1.5 md:px-2 py-0.5 md:py-1 rounded-full text-gray-600 dark:text-gray-300">
               {connectionType === 'local' ? 'localhost' : 
                connectionType === 'network' ? 'network' : 'custom'}
             </div>
           </div>
           
-          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
+          <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
             The Video to Text Converter app is active and ready to use. Access the demo through the dedicated page below.
           </p>
           
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-2 md:mt-3">
             <Link 
               href="/demo"
-              className="inline-flex items-center justify-center px-3 py-1.5 md:px-4 md:py-2 rounded-md text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-sm text-sm md:text-base"
+              className="inline-flex items-center justify-center px-2.5 py-1 md:px-4 md:py-2 rounded-md text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-sm text-xs md:text-sm"
             >
               Open Demo Page
             </Link>
           </div>
         </div>
       ) : (
-        <div className="space-y-3 md:space-y-4">
+        <div className="space-y-2 md:space-y-4">
           <div className="flex items-center space-x-2">
-            <FaTimesCircle className="text-red-500 text-lg md:text-xl" />
-            <h3 className="text-base md:text-lg font-medium text-gray-900 dark:text-gray-100">
+            <FaTimesCircle className="text-red-500 text-sm md:text-lg" />
+            <h3 className="text-sm md:text-base font-medium text-gray-900 dark:text-gray-100">
               Application is not running
             </h3>
           </div>
-          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
+          <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
             To use the Video to Text Converter, you need to start the application first.
             The app should be running on port 8025.
           </p>
-          <div className="bg-gray-50 dark:bg-gray-900 p-3 md:p-4 rounded-md text-xs md:text-sm text-gray-700 dark:text-gray-300 font-mono">
+          <div className="bg-gray-50 dark:bg-gray-900 p-2 md:p-3 rounded-md text-[11px] md:text-xs text-gray-700 dark:text-gray-300 font-mono">
             <p>Checked URLs:</p>
-            <ul className="ml-4 list-disc">
+            <ul className="ml-3 md:ml-4 list-disc text-[10px] md:text-xs">
               <li>localhost:8025</li>
               <li>video-to-text:8025</li>
               <li>{networkUrl.replace('http://', '')}</li>
@@ -129,7 +129,7 @@ export default function EmbeddedAppDemo() {
           <div className="flex justify-center">
             <Link
               href="/demo"
-              className="inline-flex items-center justify-center px-3 py-1.5 md:px-4 md:py-2 rounded-md text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 text-sm md:text-base"
+              className="inline-flex items-center justify-center px-2.5 py-1 md:px-4 md:py-2 rounded-md text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 text-xs md:text-sm"
             >
               Try Demo Page Anyway
             </Link>

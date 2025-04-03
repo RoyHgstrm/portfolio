@@ -6,7 +6,6 @@ import { FaGithub, FaEnvelope, FaArrowRight, FaStar, FaCode, FaServer, FaShieldA
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollAnimator from "./components/ScrollAnimator";
-import Todo from "./components/Todo";
 
 // Access environment variables with fallback values
 const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Roy';

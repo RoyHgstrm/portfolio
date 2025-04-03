@@ -1,4 +1,4 @@
-# Roy's Portfolio
+# Portfolio
 
 A modern, responsive portfolio website built with Next.js, Tailwind CSS, and TypeScript.
 

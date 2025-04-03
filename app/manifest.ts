@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Roy Hagström';
+const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Roy';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {

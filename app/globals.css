@@ -14,6 +14,9 @@
   --card-bg-dark: #1e1e1e;
   --font-family: var(--font-poppins), sans-serif;
   --border-radius: 16px;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 240, 242, 245;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @theme inline {
@@ -42,12 +45,20 @@
     --border: #2e2e2e;
     --card-bg: #1a1a1a;
     --card-bg-dark: #101010;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 15, 23, 42;
+    --background-end-rgb: 30, 41, 59;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  color: rgb(var(--foreground-rgb));
   font-family: var(--font-family);
   letter-spacing: -0.025em;
 }
@@ -173,20 +184,35 @@ html {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muted);
+  background-color: #f1f1f1;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 10px;
+  background-color: #c5c5c5;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
+  background-color: #a8a8a8;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background-color: #2d3748;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #4a5568;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #718096;
+  }
 }
 
 /* Glass effect */
@@ -232,29 +258,13 @@ html {
 
 /* Modern cards */
 .modern-card {
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.03);
-}
-
-.dark .modern-card {
-  background: var(--card-bg-dark);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.03);
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-md 
+         border border-gray-200 dark:border-gray-700 
+         overflow-hidden transition-all duration-300 relative;
 }
 
 .modern-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  border-color: rgba(37, 99, 235, 0.1);
-}
-
-.dark .modern-card:hover {
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-  border-color: rgba(59, 130, 246, 0.2);
+  @apply shadow-lg transform -translate-y-1;
 }
 
 /* Skills Proficiency hover effects */
@@ -405,232 +415,76 @@ html {
   border-color: var(--primary);
 }
 
-/* Todo Component Styles */
-/* Focus styles for better accessibility */
-.todo-input:focus,
-.todo-button:focus,
-.todo-action:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.todo-item {
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.todo-item:hover {
-  background-color: var(--muted);
-}
-
-.todo-item.completed {
-  opacity: 0.8;
-}
-
-.todo-checkbox {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 2px solid var(--border);
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.todo-checkbox:checked {
-  background-color: var(--primary);
-  border-color: var(--primary);
-}
-
-.todo-checkbox:checked::after {
-  content: "";
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background-color: white;
-}
-
-.todo-checkbox:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.todo-action-button {
-  opacity: 0;
-  transform: translateX(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.todo-item:hover .todo-action-button,
-.todo-item:focus-within .todo-action-button {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Button animations */
-.todo-add-button {
-  position: relative;
-  overflow: hidden;
-}
-
-.todo-add-button::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 5px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.3);
-  opacity: 0;
-  border-radius: 100%;
-  transform: scale(1, 1) translate(-50%, -50%);
-  transform-origin: 50% 50%;
-}
-
-.todo-add-button:focus:not(:active)::after {
-  animation: ripple 1s ease-out;
-}
-
-@keyframes ripple {
-  0% {
-    transform: scale(0, 0);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(20, 20);
-    opacity: 0;
-  }
-}
-
-/* Progress bar animation */
-.todo-progress {
-  height: 0.5rem;
-  border-radius: 1rem;
-  background: var(--muted);
-  overflow: hidden;
-}
-
-.todo-progress-bar {
-  height: 100%;
-  background: linear-gradient(to right, var(--primary), var(--secondary));
-  border-radius: 1rem;
-  transition: width 0.5s ease-in-out;
-}
-
-/* Text with shadow effect */
-.shadow-text {
-  text-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
-}
-
-/* Glass card effect */
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.dark .glass-card {
-  background: rgba(30, 30, 30, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-/* Animated border */
-.animated-border {
-  position: relative;
-  border-radius: var(--border-radius);
-}
-
-.animated-border::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  z-index: -1;
-  border-radius: calc(var(--border-radius) + 4px);
-  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent), var(--secondary), var(--primary));
-  background-size: 400% 400%;
-  animation: gradient 10s ease infinite;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.animated-border:hover::before {
-  opacity: 1;
-}
-
-/* Floating animation with different timing */
-.animate-float-slow {
-  animation: float 10s ease-in-out infinite;
-}
-
-.animate-float-fast {
-  animation: float 4s ease-in-out infinite;
-}
-
-/* Ensure touch targets are large enough on mobile */
+/* Custom Responsive Styles */
 @media (max-width: 640px) {
-  .btn-primary,
-  .btn-secondary,
-  button[type="submit"],
-  .todo-action-button {
-    min-height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* Improve touch targets */
+  button, a {
+    @apply min-h-[40px] min-w-[40px];
   }
   
-  /* Fix small text on mobile */
-  html {
-    font-size: 15px;
+  /* Adjust spacing for mobile */
+  h1 {
+    @apply text-2xl mb-3;
   }
   
-  /* Improve spacing in cards on mobile */
+  h2 {
+    @apply text-xl mb-2;
+  }
+  
+  h3 {
+    @apply text-lg mb-2;
+  }
+  
+  /* Make modern cards more mobile-friendly */
   .modern-card {
-    padding: 1rem !important;
+    @apply p-3;
   }
   
-  /* Make sure touch targets don't overlap */
+  /* Stack elements in flex layouts */
   .todo-item {
-    padding: 0.75rem 0.5rem;
+    @apply flex-col;
   }
   
-  /* Ensure buttons have enough space between them */
-  .flex-wrap {
-    gap: 0.5rem;
+  .todo-item-actions {
+    @apply mt-2 w-full flex justify-end;
+  }
+  
+  /* Reduce animation to improve performance */
+  .animate-fade-in {
+    animation-duration: 0.3s;
+  }
+  
+  /* Ensure all content is visible */
+  img, svg, iframe {
+    @apply max-w-full h-auto;
+  }
+  
+  /* Add backdrop filter to header for better contrast */
+  header {
+    @apply backdrop-blur-md bg-white/90 dark:bg-gray-900/90;
   }
 }
 
-/* Fix any potential z-index issues with the navbar */
-header {
-  z-index: 50;
+/* Skill Badge Styles */
+.skill-badge {
+  @apply px-3 py-1.5 rounded-full text-sm font-medium 
+         transition-all duration-300 shadow-sm;
 }
 
-/* Ensure the skill tags don't overlap on small screens */
-.flex-wrap span {
-  margin-bottom: 0.25rem;
+.skill-badge.level-1 {
+  @apply bg-blue-100 text-blue-700 dark:bg-blue-800/30 dark:text-blue-300;
 }
 
-/* Fix scrollbar on mobile */
-@media (max-width: 640px) {
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
+.skill-badge.level-2 {
+  @apply bg-green-100 text-green-700 dark:bg-green-800/30 dark:text-green-300;
 }
 
-/* Prevent content overflow */
-img, svg, iframe {
-  max-width: 100%;
+.skill-badge.level-3 {
+  @apply bg-purple-100 text-purple-700 dark:bg-purple-800/30 dark:text-purple-300;
 }
 
-/* Fix glass effect on older browsers */
-.glass {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+#skills-proficiency .skill-badge:hover {
+  @apply transform scale-105 shadow-md dark:shadow-gray-900 cursor-pointer;
+  background-color: rgba(var(--background-end-rgb), 0.9);
 }
+
