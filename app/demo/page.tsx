@@ -4,27 +4,33 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaArrowLeft, FaExclamationTriangle } from 'react-icons/fa';
 
+type ConnectionType = 'local' | 'network' | 'custom' | null;
+
 export default function DemoPage() {
   const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [connectionType, setConnectionType] = useState<ConnectionType>(null);
+  const [activeUrl, setActiveUrl] = useState<string | null>(null);
   
   // Get the app URL from environment variables with a fallback
   const networkUrl = process.env.NEXT_PUBLIC_VIDEO_TO_TEXT_APP_URL || 'http://192.168.1.106:8025';
-  const localhostUrl = 'http://localhost:8025';
-  
-  // The active URL will be set based on which connection succeeds
-  const [activeUrl, setActiveUrl] = useState<string | null>(null);
+  // Define possible URLs to check
+  const possibleUrls = [
+    { type: 'local' as ConnectionType, url: 'http://localhost:8025' },
+    { type: 'network' as ConnectionType, url: networkUrl },
+    { type: 'custom' as ConnectionType, url: 'http://video-to-text:8025' }
+  ];
 
   // Check connection to the app
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        // Try localhost first
-        const checkLocalhost = async () => {
+        // Helper function to check a URL with timeout
+        const checkUrl = async (url: string) => {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 2000);
           try {
-            await fetch(`${localhostUrl}/health`, {
+            await fetch(`${url}/health`, {
               method: 'HEAD',
               signal: controller.signal,
               mode: 'no-cors',
@@ -37,38 +43,21 @@ export default function DemoPage() {
           }
         };
         
-        // Then try configured IP address
-        const checkConfiguredAddress = async () => {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 2000);
-          try {
-            await fetch(`${networkUrl}/health`, {
-              method: 'HEAD',
-              signal: controller.signal,
-              mode: 'no-cors',
-            });
-            clearTimeout(timeoutId);
-            return true;
-          } catch (error) {
-            clearTimeout(timeoutId);
-            return false;
-          }
-        };
-        
-        // Check connections
-        const isLocalAvailable = await checkLocalhost();
-        if (isLocalAvailable) {
-          setActiveUrl(localhostUrl);
-          setIsConnected(true);
-        } else {
-          const isNetworkAvailable = await checkConfiguredAddress();
-          if (isNetworkAvailable) {
-            setActiveUrl(networkUrl);
+        // Check all possible URLs
+        for (const endpoint of possibleUrls) {
+          const isAvailable = await checkUrl(endpoint.url);
+          if (isAvailable) {
+            setConnectionType(endpoint.type);
+            setActiveUrl(endpoint.url);
             setIsConnected(true);
-          } else {
-            setActiveUrl(null);
-            setIsConnected(false);
+            break;
           }
+        }
+        
+        // If none of the URLs work, set as not connected
+        if (!activeUrl) {
+          setConnectionType(null);
+          setIsConnected(false);
         }
       } catch (error) {
         console.log("App service not available");
@@ -79,7 +68,7 @@ export default function DemoPage() {
     };
     
     checkConnection();
-  }, [localhostUrl, networkUrl]);
+  }, [networkUrl]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -96,6 +85,14 @@ export default function DemoPage() {
               Video to Text Converter Demo
             </h1>
           </div>
+          {activeUrl && (
+            <div className="ml-auto">
+              <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+                {connectionType === 'local' ? 'localhost' : 
+                 connectionType === 'network' ? 'network' : 'custom'}
+              </span>
+            </div>
+          )}
         </div>
       </header>
 
@@ -103,7 +100,7 @@ export default function DemoPage() {
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-10 md:py-16">
             <div className="w-10 h-10 md:w-12 md:h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">Loading application...</p>
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">Checking application status...</p>
           </div>
         ) : isConnected && activeUrl ? (
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
@@ -133,8 +130,15 @@ export default function DemoPage() {
             <h2 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-gray-800 dark:text-gray-200">Application Not Available</h2>
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mb-6">
               The Video to Text Converter application is not currently available. 
-              Please try again later or contact the portfolio owner for a demonstration.
+              Please make sure it's running on one of the following URLs:
             </p>
+            <div className="bg-gray-50 dark:bg-gray-900 p-3 md:p-4 rounded-md text-xs md:text-sm text-gray-700 dark:text-gray-300 font-mono mb-6 text-left">
+              <ul className="ml-4 list-disc">
+                <li>localhost:8025</li>
+                <li>video-to-text:8025</li>
+                <li>{networkUrl.replace('http://', '')}</li>
+              </ul>
+            </div>
             <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
               <Link
                 href="/#projects"
