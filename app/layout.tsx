@@ -37,7 +37,25 @@ export const metadata: Metadata = {
         type: 'image/svg+xml',
       },
     ],
+    other: [
+      {
+        rel: 'icon',
+        url: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💻</text></svg>',
+      },
+    ],
   },
+  verification: {
+    other: {
+      me: ['me@roy.kitp.fi'],
+    },
+  },
+  appleWebApp: {
+    capable: true,
+    title: `${ownerName} | Portfolio`,
+    statusBarStyle: 'black-translucent',
+  },
+  applicationName: `${ownerName} | Portfolio`,
+  metadataBase: new URL(''),
 };
 
 export default function RootLayout({
@@ -47,6 +65,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link 
+          rel="icon" 
+          href="/favicon.svg" 
+          type="image/svg+xml"
+        />
+      </head>
       <body
         className={`${poppins.variable} antialiased`}
       >

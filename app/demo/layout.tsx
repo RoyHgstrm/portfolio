@@ -3,15 +3,25 @@ import { Poppins } from "next/font/google";
 import "../globals.css";
 
 const poppins = Poppins({
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  style: ['normal', 'italic'],
+  weight: ['400', '500', '600', '700'],
   subsets: ["latin"],
   variable: "--font-poppins",
 });
 
+const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Roy';
+const ownerRole = process.env.NEXT_PUBLIC_OWNER_ROLE || 'IT Student & Web Developer';
+
 export const metadata: Metadata = {
-  title: "Video to Text Converter Demo",
-  description: "Interactive demo for the Video to Text Converter application",
+  title: `Video to Text Demo | ${ownerName}`,
+  description: `Interactive demo of the Video to Text Converter application by ${ownerName}`,
+  icons: {
+    icon: [
+      {
+        url: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">💻</text></svg>',
+        type: 'image/svg+xml',
+      },
+    ],
+  },
 };
 
 export default function DemoLayout({
@@ -21,6 +31,13 @@ export default function DemoLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link 
+          rel="icon" 
+          href="/favicon.svg" 
+          type="image/svg+xml"
+        />
+      </head>
       <body className={`${poppins.variable} antialiased`}>
         {children}
       </body>
