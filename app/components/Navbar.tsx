@@ -16,10 +16,23 @@ export default function Navbar() {
 
   // Toggle body scroll when mobile menu is open
   const toggleBodyScroll = useCallback((shouldLock: boolean) => {
-    if (shouldLock) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    if (typeof document !== 'undefined') {
+      if (shouldLock) {
+        // Save current scroll position
+        const scrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.overflow = 'hidden';
+      } else {
+        // Restore scroll position
+        const scrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.top = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     }
   }, []);
 
@@ -55,7 +68,12 @@ export default function Navbar() {
   // Clean up body styles on unmount
   useEffect(() => {
     return () => {
-      document.body.style.overflow = '';
+      if (typeof document !== 'undefined') {
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.top = '';
+        document.body.style.overflow = '';
+      }
     };
   }, []);
 
@@ -96,7 +114,7 @@ export default function Navbar() {
 
   return (
     <header 
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 w-full z-[100] transition-all duration-300 ${
         isScrolled 
           ? "glass shadow-sm" 
           : "bg-background/50 backdrop-blur-sm"
@@ -208,7 +226,7 @@ export default function Navbar() {
 
           {/* Mobile navigation button */}
           <button 
-            className="md:hidden text-xl focus:outline-none transform transition-all hover:scale-110 duration-300 hover:text-blue-600 z-50 bg-gray-100 dark:bg-gray-800 p-3 rounded-full shadow-md"
+            className="md:hidden text-xl focus:outline-none transform transition-all hover:scale-110 duration-300 hover:text-blue-600 z-[110] bg-gray-100 dark:bg-gray-800 p-3 rounded-full shadow-md"
             onClick={toggleMenu}
             aria-label="Toggle menu"
             aria-expanded={isOpen}
@@ -220,7 +238,7 @@ export default function Navbar() {
 
       {/* Mobile navigation menu */}
       <div 
-        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
+        className={`fixed inset-0 z-[105] md:hidden transition-all duration-300 ${
           isOpen 
             ? "opacity-100 pointer-events-auto" 
             : "opacity-0 pointer-events-none"
@@ -232,23 +250,24 @@ export default function Navbar() {
             isOpen ? "opacity-100" : "opacity-0"
           }`}
           onClick={toggleMenu}
+          aria-hidden="true"
         ></div>
         
         {/* Menu panel with slide-in effect */}
         <div 
-          className={`absolute top-0 right-0 h-full w-4/5 max-w-sm bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out ${
+          className={`absolute top-0 right-0 h-full w-[85%] max-w-sm bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out ${
             isOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           <div className="flex flex-col h-full overflow-y-auto">
             {/* Menu header with close button */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-between p-4 pt-6 border-b border-gray-200 dark:border-gray-800">
               <span className="font-semibold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Menu
               </span>
               <button 
                 onClick={toggleMenu}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 aria-label="Close menu"
               >
                 <FaTimes className="text-lg" />
@@ -256,12 +275,12 @@ export default function Navbar() {
             </div>
             
             {/* Menu content */}
-            <nav className="p-6 flex-1">
-              <ul className="space-y-6">
+            <nav className="px-6 py-8 flex-1">
+              <ul className="space-y-4">
                 <li>
                   <a 
                     href="#about" 
-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
                       activeSection === "about" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -274,7 +293,7 @@ export default function Navbar() {
                 <li>
                   <a 
                     href="#skills" 
-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
                       activeSection === "skills" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -287,7 +306,7 @@ export default function Navbar() {
                 <li>
                   <a 
                     href="#projects" 
-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
                       activeSection === "projects" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -300,7 +319,7 @@ export default function Navbar() {
                 <li>
                   <a 
                     href="#skills-progress" 
-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
                       activeSection === "skills-progress" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -313,7 +332,7 @@ export default function Navbar() {
                 <li>
                   <a 
                     href="#contact" 
-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
                       activeSection === "contact" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -332,19 +351,19 @@ export default function Navbar() {
                 <Link 
                   href={githubUrl}
                   target="_blank"
-                  className="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"
+                  className="flex items-center justify-center w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"
                   onClick={toggleMenu}
                   aria-label="GitHub"
                 >
-                  <FaGithub className="text-xl" />
+                  <FaGithub className="text-2xl" />
                 </Link>
                 <Link 
                   href={`mailto:${ownerEmail}`}
-                  className="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"
+                  className="flex items-center justify-center w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"
                   onClick={toggleMenu}
                   aria-label="Email"
                 >
-                  <FaEnvelope className="text-xl" />
+                  <FaEnvelope className="text-2xl" />
                 </Link>
               </div>
             </div>

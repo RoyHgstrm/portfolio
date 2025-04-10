@@ -1,0 +1,148 @@
+[1mdiff --git a/app/components/Navbar.tsx b/app/components/Navbar.tsx[m
+[1mindex 8dc61a6..85fed18 100644[m
+[1m--- a/app/components/Navbar.tsx[m
+[1m+++ b/app/components/Navbar.tsx[m
+[36m@@ -16,10 +16,23 @@[m [mexport default function Navbar() {[m
+ [m
+   // Toggle body scroll when mobile menu is open[m
+   const toggleBodyScroll = useCallback((shouldLock: boolean) => {[m
+[31m-    if (shouldLock) {[m
+[31m-      document.body.style.overflow = 'hidden';[m
+[31m-    } else {[m
+[31m-      document.body.style.overflow = '';[m
+[32m+[m[32m    if (typeof document !== 'undefined') {[m
+[32m+[m[32m      if (shouldLock) {[m
+[32m+[m[32m        // Save current scroll position[m
+[32m+[m[32m        const scrollY = window.scrollY;[m
+[32m+[m[32m        document.body.style.position = 'fixed';[m
+[32m+[m[32m        document.body.style.width = '100%';[m
+[32m+[m[32m        document.body.style.top = `-${scrollY}px`;[m
+[32m+[m[32m        document.body.style.overflow = 'hidden';[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        // Restore scroll position[m
+[32m+[m[32m        const scrollY = document.body.style.top;[m
+[32m+[m[32m        document.body.style.position = '';[m
+[32m+[m[32m        document.body.style.width = '';[m
+[32m+[m[32m        document.body.style.top = '';[m
+[32m+[m[32m        document.body.style.overflow = '';[m
+[32m+[m[32m        window.scrollTo(0, parseInt(scrollY || '0') * -1);[m
+[32m+[m[32m      }[m
+     }[m
+   }, []);[m
+ [m
+[36m@@ -55,7 +68,12 @@[m [mexport default function Navbar() {[m
+   // Clean up body styles on unmount[m
+   useEffect(() => {[m
+     return () => {[m
+[31m-      document.body.style.overflow = '';[m
+[32m+[m[32m      if (typeof document !== 'undefined') {[m
+[32m+[m[32m        document.body.style.position = '';[m
+[32m+[m[32m        document.body.style.width = '';[m
+[32m+[m[32m        document.body.style.top = '';[m
+[32m+[m[32m        document.body.style.overflow = '';[m
+[32m+[m[32m      }[m
+     };[m
+   }, []);[m
+ [m
+[36m@@ -96,7 +114,7 @@[m [mexport default function Navbar() {[m
+ [m
+   return ([m
+     <header [m
+[31m-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${[m
+[32m+[m[32m      className={`fixed top-0 w-full z-[100] transition-all duration-300 ${[m
+         isScrolled [m
+           ? "glass shadow-sm" [m
+           : "bg-background/50 backdrop-blur-sm"[m
+[36m@@ -208,7 +226,7 @@[m [mexport default function Navbar() {[m
+ [m
+           {/* Mobile navigation button */}[m
+           <button [m
+[31m-            className="md:hidden text-xl focus:outline-none transform transition-all hover:scale-110 duration-300 hover:text-blue-600 z-50 bg-gray-100 dark:bg-gray-800 p-3 rounded-full shadow-md"[m
+[32m+[m[32m            className="md:hidden text-xl focus:outline-none transform transition-all hover:scale-110 duration-300 hover:text-blue-600 z-[110] bg-gray-100 dark:bg-gray-800 p-3 rounded-full shadow-md"[m
+             onClick={toggleMenu}[m
+             aria-label="Toggle menu"[m
+             aria-expanded={isOpen}[m
+[36m@@ -220,7 +238,7 @@[m [mexport default function Navbar() {[m
+ [m
+       {/* Mobile navigation menu */}[m
+       <div [m
+[31m-        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${[m
+[32m+[m[32m        className={`fixed inset-0 z-[105] md:hidden transition-all duration-300 ${[m
+           isOpen [m
+             ? "opacity-100 pointer-events-auto" [m
+             : "opacity-0 pointer-events-none"[m
+[36m@@ -232,23 +250,24 @@[m [mexport default function Navbar() {[m
+             isOpen ? "opacity-100" : "opacity-0"[m
+           }`}[m
+           onClick={toggleMenu}[m
+[32m+[m[32m          aria-hidden="true"[m
+         ></div>[m
+         [m
+         {/* Menu panel with slide-in effect */}[m
+         <div [m
+[31m-          className={`absolute top-0 right-0 h-full w-4/5 max-w-sm bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out ${[m
+[32m+[m[32m          className={`absolute top-0 right-0 h-full w-[85%] max-w-sm bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out ${[m
+             isOpen ? "translate-x-0" : "translate-x-full"[m
+           }`}[m
+         >[m
+           <div className="flex flex-col h-full overflow-y-auto">[m
+             {/* Menu header with close button */}[m
+[31m-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">[m
+[32m+[m[32m            <div className="flex items-center justify-between p-4 pt-6 border-b border-gray-200 dark:border-gray-800">[m
+               <span className="font-semibold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">[m
+                 Menu[m
+               </span>[m
+               <button [m
+                 onClick={toggleMenu}[m
+[31m-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"[m
+[32m+[m[32m                className="p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"[m
+                 aria-label="Close menu"[m
+               >[m
+                 <FaTimes className="text-lg" />[m
+[36m@@ -256,12 +275,12 @@[m [mexport default function Navbar() {[m
+             </div>[m
+             [m
+             {/* Menu content */}[m
+[31m-            <nav className="p-6 flex-1">[m
+[31m-              <ul className="space-y-6">[m
+[32m+[m[32m            <nav className="px-6 py-8 flex-1">[m
+[32m+[m[32m              <ul className="space-y-4">[m
+                 <li>[m
+                   <a [m
+                     href="#about" [m
+[31m-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${[m
+[32m+[m[32m                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${[m
+                       activeSection === "about" [m
+                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" [m
+                         : "hover:bg-gray-50 dark:hover:bg-gray-800"[m
+[36m@@ -274,7 +293,7 @@[m [mexport default function Navbar() {[m
+                 <li>[m
+                   <a [m
+                     href="#skills" [m
+[31m-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${[m
+[32m+[m[32m                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${[m
+                       activeSection === "skills" [m
+                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" [m
+                         : "hover:bg-gray-50 dark:hover:bg-gray-800"[m
+[36m@@ -287,7 +306,7 @@[m [mexport default function Navbar() {[m
+                 <li>[m
+                   <a [m
+                     href="#projects" [m
+[31m-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${[m
+[32m+[m[32m                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${[m
+                       activeSection === "projects" [m
+                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" [m
+                         : "hover:bg-gray-50 dark:hover:bg-gray-800"[m
+[36m@@ -300,7 +319,7 @@[m [mexport default function Navbar() {[m
+                 <li>[m
+                   <a [m
+                     href="#skills-progress" [m
+[31m-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${[m
+[32m+[m[32m                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${[m
+                       activeSection === "skills-progress" [m
+                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" [m
+                         : "hover:bg-gray-50 dark:hover:bg-gray-800"[m
+[36m@@ -313,7 +332,7 @@[m [mexport default function Navbar() {[m
+                 <li>[m
+                   <a [m
+     
