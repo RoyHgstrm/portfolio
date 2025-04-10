@@ -145,4 +145,33 @@
 [36m@@ -313,7 +332,7 @@[m [mexport default function Navbar() {[m
                  <li>[m
                    <a [m
-     
+                     href="#contact" [m
+[31m-                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${[m
+[32m+[m[32m                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${[m
+                       activeSection === "contact" [m
+                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" [m
+                         : "hover:bg-gray-50 dark:hover:bg-gray-800"[m
+[36m@@ -332,19 +351,19 @@[m [mexport default function Navbar() {[m
+                 <Link [m
+                   href={githubUrl}[m
+                   target="_blank"[m
+[31m-                  className="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"[m
+[32m+[m[32m                  className="flex items-center justify-center w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"[m
+                   onClick={toggleMenu}[m
+                   aria-label="GitHub"[m
+                 >[m
+[31m-                  <FaGithub className="text-xl" />[m
+[32m+[m[32m                  <FaGithub className="text-2xl" />[m
+                 </Link>[m
+                 <Link [m
+                   href={`mailto:${ownerEmail}`}[m
+[31m-                  className="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"[m
+[32m+[m[32m                  className="flex items-center justify-center w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"[m
+                   onClick={toggleMenu}[m
+                   aria-label="Email"[m
+                 >[m
+[31m-                  <FaEnvelope className="text-xl" />[m
+[32m+[m[32m                  <FaEnvelope className="text-2xl" />[m
+                 </Link>[m
+               </div>[m
+             </div>[m

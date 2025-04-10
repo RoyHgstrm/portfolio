@@ -280,7 +280,7 @@ export default function Navbar() {
                 <li>
                   <a 
                     href="#about" 
-                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base mobile-nav-item ${
                       activeSection === "about" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -293,7 +293,7 @@ export default function Navbar() {
                 <li>
                   <a 
                     href="#skills" 
-                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base mobile-nav-item ${
                       activeSection === "skills" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -306,7 +306,7 @@ export default function Navbar() {
                 <li>
                   <a 
                     href="#projects" 
-                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base mobile-nav-item ${
                       activeSection === "projects" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -319,7 +319,7 @@ export default function Navbar() {
                 <li>
                   <a 
                     href="#skills-progress" 
-                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base mobile-nav-item ${
                       activeSection === "skills-progress" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -332,7 +332,7 @@ export default function Navbar() {
                 <li>
                   <a 
                     href="#contact" 
-                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base ${
+                    className={`flex items-center py-3 px-4 rounded-lg transition-colors text-base mobile-nav-item ${
                       activeSection === "contact" 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
                         : "hover:bg-gray-50 dark:hover:bg-gray-800"
