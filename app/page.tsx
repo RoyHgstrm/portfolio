@@ -11,7 +11,8 @@ import ScrollAnimator from "./components/ScrollAnimator";
 const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Roy';
 const ownerRole = process.env.NEXT_PUBLIC_OWNER_ROLE || 'IT Student & Web Developer';
 const ownerLocation = process.env.NEXT_PUBLIC_OWNER_LOCATION || 'Finland';
-const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL || 'https://github.com/RoyHgstrm';
+const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL || '#';
+const ownerEmail = process.env.NEXT_PUBLIC_OWNER_EMAIL || '#';
 
 export default function Home() {
   return (
@@ -186,7 +187,7 @@ export default function Home() {
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-4 md:mb-6 text-sm md:text-base">
                   A real-time multiplayer drawing and guessing game built with Socket.io, React, and Node.js.
-                  Players take turns drawing while others try to guess what's being drawn.
+                  Players take turns drawing while others try to guess what&apos;s being drawn.
                 </p>
                 <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 p-3 md:p-4 rounded-lg mb-4 md:mb-6 overflow-x-auto">
                   <div className="flex flex-wrap gap-2 min-w-[300px]">
@@ -502,11 +503,11 @@ export default function Home() {
             
             <div className="flex flex-col items-center animate-on-scroll">
               <a 
-                href="mailto:roy.h@mail.com" 
+                href={`mailto:${ownerEmail}`}
                 className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 group shadow-lg hover:shadow-xl"
               >
                 <FaEnvelope className="text-2xl" />
-                <span className="text-xl font-medium">roy.h@mail.com</span>
+                <span className="text-xl font-medium">{ownerEmail}</span>
                 <FaArrowRight className="text-xl transition-transform group-hover:translate-x-1" />
               </a>
             </div>

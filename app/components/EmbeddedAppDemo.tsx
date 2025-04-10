@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaTimesCircle } from 'react-icons/fa';
 
 type ConnectionType = 'local' | 'network' | 'custom' | null;
 
@@ -37,7 +37,7 @@ export default function EmbeddedAppDemo() {
             });
             clearTimeout(timeoutId);
             return true;
-          } catch (error) {
+          } catch (_) {
             clearTimeout(timeoutId);
             return false;
           }
@@ -60,7 +60,7 @@ export default function EmbeddedAppDemo() {
           setActiveUrl(null);
           setIsConnected(false);
         }
-      } catch (error) {
+      } catch (_) {
         console.log("App service not available");
         setIsConnected(false);
       } finally {
@@ -69,7 +69,7 @@ export default function EmbeddedAppDemo() {
     };
     
     checkConnection();
-  }, [networkUrl, isConnected]);
+  }, [networkUrl, isConnected, possibleUrls]);
 
   return (
     <div className="relative p-4 md:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">

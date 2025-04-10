@@ -8,8 +8,7 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Roy';
-const ownerRole = process.env.NEXT_PUBLIC_OWNER_ROLE || 'IT Student & Web Developer';
+const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Portfolio';
 
 export const metadata: Metadata = {
   title: `Video to Text Demo | ${ownerName}`,

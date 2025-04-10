@@ -37,7 +37,7 @@ export default function DemoPage() {
             });
             clearTimeout(timeoutId);
             return true;
-          } catch (error) {
+          } catch (_) {
             clearTimeout(timeoutId);
             return false;
           }
@@ -59,7 +59,7 @@ export default function DemoPage() {
           setConnectionType(null);
           setIsConnected(false);
         }
-      } catch (error) {
+      } catch (_) {
         console.log("App service not available");
         setIsConnected(false);
       } finally {
@@ -68,7 +68,7 @@ export default function DemoPage() {
     };
     
     checkConnection();
-  }, [networkUrl, possibleUrls]);
+  }, [networkUrl, possibleUrls, isConnected, activeUrl]);
 
   return (
     <main className="min-h-screen pt-16 px-4 sm:px-6 md:px-8">
@@ -116,7 +116,7 @@ export default function DemoPage() {
             <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-gray-800 dark:text-gray-200">Application Not Available</h2>
             <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-6">
               The Video to Text Converter application is not currently available. 
-              Please make sure it's running on one of the following URLs:
+              Please make sure it&apos;s running on one of the following URLs:
             </p>
             <div className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-4 rounded-md text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-mono mb-6 text-left">
               <ul className="ml-4 list-disc">

@@ -1,17 +1,63 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { FaGithub, FaBars, FaTimes, FaEnvelope } from "react-icons/fa";
 
-const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Roy';
-const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL || 'https://github.com/RoyHgstrm';
-const ownerEmail = 'roy.h@mail.com';
+// Add fallback values to prevent type errors with undefined
+const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Portfolio';
+const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL || '#';
+const ownerEmail = process.env.NEXT_PUBLIC_OWNER_EMAIL || '#';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+
+  // Toggle body scroll when mobile menu is open
+  const toggleBodyScroll = useCallback((shouldLock: boolean) => {
+    if (shouldLock) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, []);
+
+  // Toggle mobile menu
+  const toggleMenu = useCallback(() => {
+    const newState = !isOpen;
+    setIsOpen(newState);
+    toggleBodyScroll(newState);
+  }, [isOpen, toggleBodyScroll]);
+
+  // Close mobile menu on window resize (to prevent it remaining open on desktop)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && isOpen) {
+        setIsOpen(false);
+        toggleBodyScroll(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen, toggleBodyScroll]);
+
+  // Handle navigation click
+  const handleNavClick = useCallback((sectionId: string) => {
+    setActiveSection(sectionId);
+    if (isOpen) {
+      setIsOpen(false);
+      toggleBodyScroll(false);
+    }
+  }, [isOpen, toggleBodyScroll]);
+
+  // Clean up body styles on unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   // Handle scroll effect and active section
   useEffect(() => {
@@ -61,7 +107,7 @@ export default function Navbar() {
           <Link 
             href="/" 
             className="font-bold text-lg relative group overflow-hidden"
-            onClick={() => setActiveSection("home")}
+            onClick={() => handleNavClick("home")}
           >
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{ownerName}</span>
             <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100 origin-left"></span>
@@ -76,7 +122,7 @@ export default function Navbar() {
                   className={`relative group transition-colors hover:text-blue-600 ${
                     activeSection === "about" ? "text-blue-600 font-medium" : ""
                   }`}
-                  onClick={() => setActiveSection("about")}
+                  onClick={() => handleNavClick("about")}
                 >
                   About
                   <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full transform transition-transform duration-300 ${
@@ -90,7 +136,7 @@ export default function Navbar() {
                   className={`relative group transition-colors hover:text-blue-600 ${
                     activeSection === "skills" ? "text-blue-600 font-medium" : ""
                   }`}
-                  onClick={() => setActiveSection("skills")}
+                  onClick={() => handleNavClick("skills")}
                 >
                   Skills
                   <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full transform transition-transform duration-300 ${
@@ -104,7 +150,7 @@ export default function Navbar() {
                   className={`relative group transition-colors hover:text-blue-600 ${
                     activeSection === "projects" ? "text-blue-600 font-medium" : ""
                   }`}
-                  onClick={() => setActiveSection("projects")}
+                  onClick={() => handleNavClick("projects")}
                 >
                   Projects
                   <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full transform transition-transform duration-300 ${
@@ -118,7 +164,7 @@ export default function Navbar() {
                   className={`relative group transition-colors hover:text-blue-600 ${
                     activeSection === "skills-progress" ? "text-blue-600 font-medium" : ""
                   }`}
-                  onClick={() => setActiveSection("skills-progress")}
+                  onClick={() => handleNavClick("skills-progress")}
                 >
                   Skills Progress
                   <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full transform transition-transform duration-300 ${
@@ -132,7 +178,7 @@ export default function Navbar() {
                   className={`relative group transition-colors hover:text-blue-600 ${
                     activeSection === "contact" ? "text-blue-600 font-medium" : ""
                   }`}
-                  onClick={() => setActiveSection("contact")}
+                  onClick={() => handleNavClick("contact")}
                 >
                   Contact
                   <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full transform transition-transform duration-300 ${
@@ -163,8 +209,9 @@ export default function Navbar() {
           {/* Mobile navigation button */}
           <button 
             className="md:hidden text-xl focus:outline-none transform transition-all hover:scale-110 duration-300 hover:text-blue-600 z-50 bg-gray-100 dark:bg-gray-800 p-3 rounded-full shadow-md"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={toggleMenu}
             aria-label="Toggle menu"
+            aria-expanded={isOpen}
           >
             {isOpen ? <FaTimes /> : <FaBars />}
           </button>
@@ -172,108 +219,138 @@ export default function Navbar() {
       </div>
 
       {/* Mobile navigation menu */}
-      {isOpen && (
-        <div className="fixed inset-0 glass z-40 md:hidden flex items-center justify-center">
-          <nav className="container px-4 py-4 text-center">
-            <ul className="space-y-8 text-2xl">
-              <li>
-                <a 
-                  href="#about" 
-                  className={`block py-2 hover:text-blue-600 transition-colors relative group ${
-                    activeSection === "about" ? "text-blue-600 font-medium" : ""
-                  }`}
-                  onClick={() => {
-                    setIsOpen(false);
-                    setActiveSection("about");
-                  }}
-                >
-                  About
-                  <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full group-hover:left-0 rounded-full"></span>
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#skills" 
-                  className={`block py-2 hover:text-blue-600 transition-colors relative group ${
-                    activeSection === "skills" ? "text-blue-600 font-medium" : ""
-                  }`}
-                  onClick={() => {
-                    setIsOpen(false);
-                    setActiveSection("skills");
-                  }}
-                >
-                  Skills
-                  <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full group-hover:left-0 rounded-full"></span>
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#projects" 
-                  className={`block py-2 hover:text-blue-600 transition-colors relative group ${
-                    activeSection === "projects" ? "text-blue-600 font-medium" : ""
-                  }`}
-                  onClick={() => {
-                    setIsOpen(false);
-                    setActiveSection("projects");
-                  }}
-                >
-                  Projects
-                  <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full group-hover:left-0 rounded-full"></span>
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#skills-progress" 
-                  className={`block py-2 hover:text-blue-600 transition-colors relative group ${
-                    activeSection === "skills-progress" ? "text-blue-600 font-medium" : ""
-                  }`}
-                  onClick={() => {
-                    setIsOpen(false);
-                    setActiveSection("skills-progress");
-                  }}
-                >
-                  Skills Progress
-                  <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full group-hover:left-0 rounded-full"></span>
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#contact" 
-                  className={`block py-2 hover:text-blue-600 transition-colors relative group ${
-                    activeSection === "contact" ? "text-blue-600 font-medium" : ""
-                  }`}
-                  onClick={() => {
-                    setIsOpen(false);
-                    setActiveSection("contact");
-                  }}
-                >
-                  Contact
-                  <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full group-hover:left-0 rounded-full"></span>
-                </a>
-              </li>
-              <li className="flex justify-center space-x-8 pt-8">
+      <div 
+        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
+          isOpen 
+            ? "opacity-100 pointer-events-auto" 
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {/* Backdrop with blur effect */}
+        <div 
+          className={`absolute inset-0 bg-gray-900/60 backdrop-blur-md transition-opacity duration-300 ${
+            isOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={toggleMenu}
+        ></div>
+        
+        {/* Menu panel with slide-in effect */}
+        <div 
+          className={`absolute top-0 right-0 h-full w-4/5 max-w-sm bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out ${
+            isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="flex flex-col h-full overflow-y-auto">
+            {/* Menu header with close button */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
+              <span className="font-semibold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Menu
+              </span>
+              <button 
+                onClick={toggleMenu}
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                aria-label="Close menu"
+              >
+                <FaTimes className="text-lg" />
+              </button>
+            </div>
+            
+            {/* Menu content */}
+            <nav className="p-6 flex-1">
+              <ul className="space-y-6">
+                <li>
+                  <a 
+                    href="#about" 
+                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                      activeSection === "about" 
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
+                        : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                    }`}
+                    onClick={() => handleNavClick("about")}
+                  >
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="#skills" 
+                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                      activeSection === "skills" 
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
+                        : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                    }`}
+                    onClick={() => handleNavClick("skills")}
+                  >
+                    Skills
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="#projects" 
+                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                      activeSection === "projects" 
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
+                        : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                    }`}
+                    onClick={() => handleNavClick("projects")}
+                  >
+                    Projects
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="#skills-progress" 
+                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                      activeSection === "skills-progress" 
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
+                        : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                    }`}
+                    onClick={() => handleNavClick("skills-progress")}
+                  >
+                    Skills Progress
+                  </a>
+                </li>
+                <li>
+                  <a 
+                    href="#contact" 
+                    className={`flex items-center py-2 px-4 rounded-lg transition-colors ${
+                      activeSection === "contact" 
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium" 
+                        : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                    }`}
+                    onClick={() => handleNavClick("contact")}
+                  >
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </nav>
+            
+            {/* Menu footer with social icons */}
+            <div className="p-6 border-t border-gray-200 dark:border-gray-800">
+              <div className="flex justify-around">
                 <Link 
                   href={githubUrl}
                   target="_blank"
-                  className="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-lg"
-                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"
+                  onClick={toggleMenu}
                   aria-label="GitHub"
                 >
                   <FaGithub className="text-xl" />
                 </Link>
                 <Link 
                   href={`mailto:${ownerEmail}`}
-                  className="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-lg"
-                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full hover:text-blue-600 transition-all transform hover:scale-110 shadow-md"
+                  onClick={toggleMenu}
                   aria-label="Email"
                 >
                   <FaEnvelope className="text-xl" />
                 </Link>
-              </li>
-            </ul>
-          </nav>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </header>
   );
 } 

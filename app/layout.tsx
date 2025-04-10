@@ -9,8 +9,9 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Roy Hagström';
-const ownerRole = process.env.NEXT_PUBLIC_OWNER_ROLE || 'IT Student & Web Developer';
+const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || '#';
+const ownerRole = process.env.NEXT_PUBLIC_OWNER_ROLE || '#';
+const ownerEmail = process.env.NEXT_PUBLIC_OWNER_EMAIL || 'me@test.com';
 
 export const metadata: Metadata = {
   title: `${ownerName} | ${ownerRole}`,
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
   },
   verification: {
     other: {
-      me: ['me@roy.kitp.fi'],
+      me: [ownerEmail],
     },
   },
   appleWebApp: {

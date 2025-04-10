@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaArrowUp } from "react-icons/fa";
 
-const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Roy';
-const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL || 'https://github.com/RoyHgstrm';
-const ownerEmail = 'roy.h@mail.com';
+// Add fallback values to prevent type errors with undefined
+const ownerName = process.env.NEXT_PUBLIC_OWNER_NAME || 'Portfolio';
+const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL || '#';
+const ownerEmail = process.env.NEXT_PUBLIC_OWNER_EMAIL || '#';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
