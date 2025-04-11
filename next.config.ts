@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   poweredByHeader: false,
   images: {
-    domains: [],
+    domains: ['private-user-images.githubusercontent.com'],
   },
   async headers() {
     return [
